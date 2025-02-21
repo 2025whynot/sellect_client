@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext.jsx';
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext.jsx";
 
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -27,9 +27,11 @@ function Login() {
       });
       if (response.ok) {
         const data = await response.json();
-       
+
         login(data.result.nickname, data.result.role);
-        navigate(data.result.role === 'USER' ? '/home' : '/seller', { replace: true });
+        navigate(data.result.role === "USER" ? "/home" : "/seller", {
+          replace: true,
+        });
       } else {
         const errData = await response.json();
         setError(errData.message || "로그인에 실패했습니다.");
@@ -56,7 +58,9 @@ function Login() {
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
-              <label htmlFor="email-address" className="sr-only">이메일</label>
+              <label htmlFor="email-address" className="sr-only">
+                이메일
+              </label>
               <input
                 id="email-address"
                 name="email"
@@ -69,7 +73,9 @@ function Login() {
               />
             </div>
             <div>
-              <label htmlFor="password" className="sr-only">비밀번호</label>
+              <label htmlFor="password" className="sr-only">
+                비밀번호
+              </label>
               <input
                 id="password"
                 name="password"
@@ -91,8 +97,11 @@ function Login() {
             </button>
           </div>
           <p className="text-center text-sm text-gray-600">
-            계정이 없나요?{' '}
-            <Link to="/register" className="font-medium text-indigo-600 hover:text-indigo-500 transition-colors">
+            계정이 없나요?{" "}
+            <Link
+              to="/register"
+              className="font-medium text-indigo-600 hover:text-indigo-500 transition-colors"
+            >
               새로운 계정 만들기
             </Link>
           </p>
