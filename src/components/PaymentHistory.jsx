@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import useApiService from "../services/ApiService.js";
 
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -8,6 +9,8 @@ const PaymentHistory = () => {
   const [page] = useState(0);
   const [size] = useState(5);
   const [loading, setLoading] = useState(false);
+  const { get, post } = useApiService();
+
 
   // 날짜 포맷팅 함수
   const formatDate = (isoString) => {
@@ -25,15 +28,18 @@ const PaymentHistory = () => {
   const fetchPaymentHistory = async () => {
     setLoading(true);
     try {
-      const response = await fetch(
-          `${VITE_API_BASE_URL}/api/v1/payment/history?page=${page}&size=${size}`,
-          {
-            credentials: 'include',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          }
-      );
+      // const response = await fetch(
+      //     `${VITE_API_BASE_URL}/api/v1/payment/history?page=${page}&size=${size}`,
+      //     {
+      //       credentials: 'include',
+      //       headers: {
+      //         'Content-Type': 'application/json',
+      //       },
+      //     }
+      // );
+
+      const response = await get(`${VITE_API_BASE_URL}/api/v1/payment/history?page=${page}&size=${size}`);
+
       if (!response.ok) {
         throw new Error('결제 내역 조회 실패');
       }

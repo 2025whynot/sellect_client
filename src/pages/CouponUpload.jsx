@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
+import useApiService from "../services/ApiService.js";
 
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function CouponUploader() {
   const navigate = useNavigate();
+  const { get, post} = useApiService();
 
   const [formData, setFormData] = useState({
     quantity: '',
@@ -70,16 +72,8 @@ function CouponUploader() {
     };
 
     try {
-      const response = await fetch(`${VITE_API_BASE_URL}/api/v1/coupon/issue`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(dataToSend),
-      });
-
-      if (response.ok) {
+      const response = await post(`${VITE_API_BASE_URL}/api/v1/coupon/issue`, dataToSend);
+      if (response.data.is_success) {
         alert('쿠폰이 성공적으로 등록되었습니다!');
         navigate('/seller');
       } else {
