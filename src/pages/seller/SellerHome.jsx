@@ -1,36 +1,33 @@
 import {Link} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axios from "axios";
+import useApiService from "../../services/ApiService.js";
 
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function SellerHome() {
   const [sellerStats, setSellerStats] = useState({
     totalProductsCount: 0,
-    totalSales: "$0.00",
+    totalSales: "0원",
     pendingOrders: 0,
   });
   const [recentProducts, setRecentProducts] = useState([]);
+  const { get, post, patch, del} = useApiService();
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        let response = await axios.get(`${VITE_API_BASE_URL}/api/v1/seller/stats`, {
-          withCredentials: true,
-        });
+        // let response = await axios.get(`${VITE_API_BASE_URL}/api/v1/seller/stats`, {
+        //   withCredentials: true,
+        // });
+
+        let response = await get(`${VITE_API_BASE_URL}/api/v1/seller/stats`);
         setSellerStats((prev) => ({
           ...prev,
-          totalSales: new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-          }).format(response.data.result.total_sales) || "$0.00",
+          totalSales: response.data.result.total_sales.toLocaleString() + "원",
           totalProductsCount: response.data.result.total_products_count || 0,
         }));
 
-        // response = await axios.get(`${VITE_API_BASE_URL}/api/v1/seller/products/recent`, {
-        //   withCredentials: true,
-        // });
-        // setRecentProducts(response.data.result || []);
       } catch (error) {
         console.error("상품 정보를 불러오는 중 오류가 발생했습니다:", error);
       }

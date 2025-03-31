@@ -1,20 +1,24 @@
 import { useEffect, useState } from "react";
 import OrderHeader from "../components/order/OrderHeader.jsx";
 import OrderItem from "../components/order/OrderItem.jsx";
+import useApiService from "../services/ApiService.js";
 
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function OrderList() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { get, post } = useApiService();
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch(`${VITE_API_BASE_URL}/api/v1/orders`, {
-          method: "GET",
-          credentials: "include",
-        });
+        const response = await get(`${VITE_API_BASE_URL}/api/v1/orders`);
+
+        // const response = await fetch(`${VITE_API_BASE_URL}/api/v1/orders`, {
+        //   method: "GET",
+        //   credentials: "include",
+        // });
 
         if (!response.ok) {
           throw new Error(`주문 리스트 HTTP error! Status: ${response.status}`);

@@ -1,5 +1,6 @@
 // CouponRegisterPage.jsx
 import React, { useState, useEffect } from 'react';
+import useApiService from "../services/ApiService.js";
 
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL; // 환경 변수 불러오기
 
@@ -9,15 +10,14 @@ const CouponRegisterPage = () => {
   const [size] = useState(5);
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(false);
+  const { get, put } = useApiService();
 
   const fetchCoupons = async (currentPage = 0) => {
     try {
       setLoading(true);
-      const response = await fetch(`${VITE_API_BASE_URL}/api/v1/coupon/actives?page=${currentPage}&size=${size}`, {
-        credentials: 'include', // 쿠키 인증 필요 시
-      });
-      if (!response.ok) throw new Error('쿠폰 조회 실패');
-      const data = await response.json();
+      const response = await get(`${VITE_API_BASE_URL}/api/v1/coupon/actives?page=${currentPage}&size=${size}`);
+      if (!response.data.is_success) throw new Error('쿠폰 조회 실패');
+      const data = await response.data;
 
       if (data.is_success) {
         setCoupons(data.result.content); // content 배열 설정
@@ -39,12 +39,15 @@ const CouponRegisterPage = () => {
 
   const handleRegisterCoupon = async (couponId) => {
     try {
-      const response = await fetch(`${VITE_API_BASE_URL}/api/v1/coupon/register/${couponId}`, {
-        method: 'PUT',
-        credentials: 'include',
-      });
-      if (!response.ok) throw new Error('쿠폰 발급 실패');
-      const data = await response.json();
+      // const response = await fetch(`${VITE_API_BASE_URL}/api/v1/coupon/register/${couponId}`, {
+      //   method: 'PUT',
+      //   credentials: 'include',
+      // });
+      const response = await put(`${VITE_API_BASE_URL}/api/v1/coupon/register/${couponId}`);
+      console.log(response)
+      if (!response.data.is_success) throw new Error('쿠폰 발급 실패');
+      const data = await response.data;
+      console.log('Register Coupon Response:', data);
       if (data.is_success) {
         fetchCoupons(page); // 목록 갱신
         alert('쿠폰이 발급되었습니다!');

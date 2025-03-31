@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import useApiService from "../services/ApiService.js";
 
 
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -9,6 +10,7 @@ const Coupons = () => {
   const [size] = useState(5);
   const [isUsed, setIsUsed] = useState(null); // 기본값 null (전체)
   const [loading, setLoading] = useState(false);
+  const { get, post } = useApiService();
 
   // API 호출 함수
   const fetchCoupons = async (isUsedFilter = null) => {
@@ -17,9 +19,10 @@ const Coupons = () => {
       const url = `${VITE_API_BASE_URL}/api/v1/coupon?page=${page}&size=${size}${
           isUsedFilter !== null ? `&isUsed=${isUsedFilter}` : ''
       }`;
-      const response = await fetch(url, {
-        credentials: 'include',
-      });
+      const response = await get(url);
+      // const response = await fetch(url, {
+      //   credentials: 'include',
+      // });
       if (!response.ok) throw new Error('쿠폰 조회 실패');
       const data = await response.json();
       if (data.is_success) {

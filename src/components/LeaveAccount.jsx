@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import useApiService from "../services/ApiService.js";
 
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const LeaveAccount = () => {
@@ -9,8 +10,7 @@ const LeaveAccount = () => {
   const [confirmText, setConfirmText] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-
-  console.log('LeaveAccount - useAuth:', { isLoggedIn, logout });
+  const { del } = useApiService();
 
   const handleLeave = async (e) => {
     e.preventDefault();
@@ -27,13 +27,15 @@ const LeaveAccount = () => {
 
     setLoading(true);
     try {
-      const response = await fetch(`${VITE_API_BASE_URL}/api/v1/users/leave`, {
-        method: 'DELETE',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      // const response = await fetch(`${VITE_API_BASE_URL}/api/v1/users/leave`, {
+      //   method: 'DELETE',
+      //   credentials: 'include',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      // });
+
+      const response = await del(`${VITE_API_BASE_URL}/api/v1/users/leave`);
 
       if (!response.ok) {
         let errorMessage = '회원탈퇴에 실패했습니다.';

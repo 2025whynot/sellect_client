@@ -1,5 +1,5 @@
 import React from "react";
-import { FaTicketAlt } from "react-icons/fa"; // react-icons 라이브러리 사용 (설치 필요: npm install react-icons)
+ import { FaTicketAlt } from "react-icons/fa"; // react-icons 라이브러리 사용 (설치 필요: npm install react-icons)
 
 function CouponInfo({ coupon, applyCoupon }) {
   return (
