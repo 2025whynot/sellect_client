@@ -15,16 +15,11 @@ function OrderList() {
       try {
         const response = await get(`${VITE_API_BASE_URL}/api/v1/orders`);
 
-        // const response = await fetch(`${VITE_API_BASE_URL}/api/v1/orders`, {
-        //   method: "GET",
-        //   credentials: "include",
-        // });
-
-        if (!response.ok) {
+        if (!response.data.is_success){
           throw new Error(`주문 리스트 HTTP error! Status: ${response.status}`);
         }
 
-        const data = await response.json();
+        const data = await response.data;
 
         if (data.is_success && Array.isArray(data.result)) {
           setOrders(data.result);

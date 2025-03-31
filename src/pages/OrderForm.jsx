@@ -4,10 +4,12 @@ import CartOrderItem from "../components/order/OrderItem.jsx";
 import CouponItem from "../components/CouponItem";
 import PaymentSummary from "../components/order/PaymentSummary";
 import {useAuth} from "../context/AuthContext.jsx";
+import useApiService from "../services/ApiService.js";
 
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function OrderForm() {
+  console.log(1111);
   const [orderItems, setOrderItems] = useState([]);
   const [coupons, setCoupons] = useState([]);
   const [coupon, setCoupon] = useState(null);
@@ -17,6 +19,7 @@ function OrderForm() {
   const [error, setError] = useState(null);
   const [couponError, setCouponError] = useState(null);
   const { updateCartCount } = useAuth();
+  const {get, post } = useApiService();
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -49,16 +52,18 @@ function OrderForm() {
 
     const fetchOrderItems = async () => {
       try {
-        const response = await fetch(
-            `${VITE_API_BASE_URL}/api/v1/orders/${orderId}/pending`,
-            {credentials: "include"}
-        );
+        // const response = await fetch(
+        //     `${VITE_API_BASE_URL}/api/v1/orders/${orderId}/pending`,
+        //     {credentials: "include"}
+        // );
 
-        if (!response.ok) {
+        const response = await get(`${VITE_API_BASE_URL}/api/v1/orders/${orderId}/pending`);
+        console.log("test:", response);
+        if (!response.data.is_success) {
           throw new Error("주문 상품을 불러오지 못했습니다.");
         }
 
-        const data = await response.json();
+        const data = await response.data;
         setOrderItems(data?.result || []);
       } catch (err) {
         setError(err.message);
@@ -86,19 +91,13 @@ function OrderForm() {
       productIds.forEach((id) => params.append("productIds", id));
       const url = `${VITE_API_BASE_URL}/api/v1/coupon/possible-order?${params.toString()}`;
 
-      const response = await fetch(url, {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await get(url);
 
-      if (!response.ok) {
+      if (!response.data.is_success) {
         throw new Error("쿠폰을 불러오지 못했습니다.");
       }
 
-      const data = await response.json();
+      const data = await response.data;
       setCoupons(data?.result || []);
       setShowCoupons(true);
     } catch (err) {
@@ -140,17 +139,10 @@ function OrderForm() {
     };
 
     try {
-      const response = await fetch(`${VITE_API_BASE_URL}/api/v1/payment/ready`,
-          {
-            method: "POST",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(paymentData),
-          });
+      const response = await post(`${VITE_API_BASE_URL}/api/v1/order/payment/${orderId}/ready`, paymentData);
+      console.log("paymentData:", paymentData);
 
-      if (!response.ok) {
+      if (!response.data.is_success) {
         throw new Error("결제 준비에 실패했습니다.");
       }
 
