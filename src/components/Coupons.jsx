@@ -20,11 +20,8 @@ const Coupons = () => {
           isUsedFilter !== null ? `&isUsed=${isUsedFilter}` : ''
       }`;
       const response = await get(url);
-      // const response = await fetch(url, {
-      //   credentials: 'include',
-      // });
-      if (!response.ok) throw new Error('쿠폰 조회 실패');
-      const data = await response.json();
+      if (!response.data.is_success) throw new Error('쿠폰 조회 실패');
+      const data = await response.data;
       if (data.is_success) {
         setCoupons(data.result || []);
       } else {

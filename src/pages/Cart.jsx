@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import {Link, replace, useNavigate} from "react-router-dom";
 import CartItem from "../components/CartItem.jsx";
 import {useAuth} from "../context/AuthContext.jsx";
 import useApiService from "../services/ApiService.js";
@@ -12,17 +11,13 @@ function CartPage() {
   const { updateCartCount } = useAuth();
   const { get, post, patch, del} = useApiService();
 
+
   // ✅ 장바구니 데이터 불러오기
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
         const baseApiUrl = import.meta.env.VITE_API_BASE_URL;
         if (!baseApiUrl) throw new Error("VITE_API_BASE_URL이 정의되지 않았습니다.");
-
-        // const response = await axios.get(`${baseApiUrl}/api/v1/carts`, {
-        //   withCredentials: true,
-        //   headers: { "Content-Type": "application/json" },
-        // });
 
         const response = await get(`${baseApiUrl}/api/v1/carts`);
 
@@ -52,17 +47,7 @@ function CartPage() {
       }
 
       const baseApiUrl = import.meta.env.VITE_API_BASE_URL;
-      // const response = await axios.patch(
-      //     `${baseApiUrl}/api/v1/carts/${cartItemId}`,
-      //     { cart_item_id: cartItemId, quantity: change },
-      //     {
-      //       withCredentials: true,
-      //       headers: { "Content-Type": "application/json" },
-      //     }
-      // );
       const response = await patch(`${baseApiUrl}/api/v1/carts/${cartItemId}`, { cart_item_id: cartItemId, quantity: change });
-
-
       if (response.data.is_success) {
         const updatedItem = response.data.result;
         setCartItems((prevItems) =>
@@ -127,21 +112,12 @@ function CartPage() {
         }))
       };
 
-      // const response = await axios.post(
-      //     `${baseApiUrl}/api/v1/order/pending`,
-      //     orderData,
-      //     {
-      //       withCredentials: true,
-      //       headers: { "Content-Type": "application/json" },
-      //     }
-      // );
-
-
       const response = await post(`${baseApiUrl}/api/v1/order/pending`, orderData);
-
+      console.log("✅ 주문 생성 응답:", response.data);
       if (response.data.is_success) {
         const orderId = response.data.result.order_id;
-        navigate("/order/form", { state: { orderId } });
+        console.log("✅ 주문 생성 성공, 주문 ID:", orderId);
+        navigate("/order/form", { state: { orderId } },replace(true));
       } else {
         console.error("❌ 주문 생성 실패:", response.data.message);
         alert("주문 생성에 실패했습니다.");
@@ -177,6 +153,7 @@ function CartPage() {
               )}
             </div>
             <div className="mt-6">
+
               <button
                   onClick={createOrder}
                   className="w-full py-2.5 bg-indigo-600 text-white font-semibold rounded-md text-base hover:bg-indigo-700 transition"

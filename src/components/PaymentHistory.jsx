@@ -28,22 +28,12 @@ const PaymentHistory = () => {
   const fetchPaymentHistory = async () => {
     setLoading(true);
     try {
-      // const response = await fetch(
-      //     `${VITE_API_BASE_URL}/api/v1/payment/history?page=${page}&size=${size}`,
-      //     {
-      //       credentials: 'include',
-      //       headers: {
-      //         'Content-Type': 'application/json',
-      //       },
-      //     }
-      // );
-
       const response = await get(`${VITE_API_BASE_URL}/api/v1/payment/history?page=${page}&size=${size}`);
 
-      if (!response.ok) {
+      if (!response.data.is_success) {
         throw new Error('결제 내역 조회 실패');
       }
-      const data = await response.json();
+      const data = await response.data;
       console.log('Payment History Response:', data);
       const paymentData = data?.result || data || [];
       setPayments(paymentData); // 데이터가 있든 없든 그대로 설정
