@@ -52,10 +52,6 @@ function OrderForm() {
 
     const fetchOrderItems = async () => {
       try {
-        // const response = await fetch(
-        //     `${VITE_API_BASE_URL}/api/v1/orders/${orderId}/pending`,
-        //     {credentials: "include"}
-        // );
 
         const response = await get(`${VITE_API_BASE_URL}/api/v1/orders/${orderId}/pending`);
         console.log("test:", response);
@@ -146,7 +142,7 @@ function OrderForm() {
         throw new Error("결제 준비에 실패했습니다.");
       }
 
-      const data = await response.json();
+      const data = await response.data;
       const redirectUrl = data.result; // body에서 redirectUrl 사용
 
       const paymentWindow = window.open(
