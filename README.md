@@ -1,8 +1,15 @@
-# Getting Started with Create React App
+# 판매자 시연 영상
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### 주요 기능
+- 상품 등록
+- 쿠폰 등록
+- 대시보드를 통한 매출 확인
 
-## 구매자 시연 영상
+[https://github.com/user-attachments/assets/0a156e8c-d324-4846-ad52-63a37a309682](https://github.com/user-attachments/assets/0a156e8c-d324-4846-ad52-63a37a309682)
+
+<br/>
+
+# 구매자 시연 영상
 
 ### 주요 기능
 - 상품 검색
@@ -10,6 +17,5 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 - 쿠폰 다운로드 및 사용
 - 장바구니 관리 (조회, 등록, 수정, 삭제)
 - 주문 내역 조회
-- 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/3QJncTroPUQ?si=ceqlwMJtT1rlutjH" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
+  
+[https://github.com/2025whynot/sellect_client/issues/60#issue-2962480269](https://github.com/user-attachments/assets/370ddd1c-79d8-4a17-b1ad-5882d1a9c5c1)
